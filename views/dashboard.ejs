@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/dashboardStyles.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Baloo+Da+2&display=swap"
+      rel="stylesheet"
+    />
+    <title>Snazzy Movie Dashboard</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="menu">
+        <div class="brand">
+          <img src="./assets/cloud-logo.png" alt="logo" />
+        </div>
+        <nav class="menu-list">
+          <ul>
+            <li>
+              <a href="/" class="active">
+                <img class="menu-icon" src="./assets/home.svg" alt="home" />
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="/">
+                <img class="menu-icon" src="./assets/folder.svg" alt="folder" />
+                <span>My Files</span>
+              </a>
+            </li>
+            <li>
+              <a href="/newMovie">
+                <img class="menu-icon" src="./assets/upload.svg" alt="clock" />
+                <span>Upload New Movie</span>
+              </a>
+            </li>
+            <li>
+              <a href="/">
+                <img class="menu-icon" src="./assets/trash-2.svg" alt="trash" />
+                <span>Trash</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+    
+      </div>
+      <div class="content">
+        <div class="main-content">
+            <div class="project">
+              <a href="/newMovie">
+                <button class="new-project-button">
+                  Add New Movie
+                  <img
+                    src="./assets/plus.svg"
+                    alt="plus"
+                    style="width:20px; height:20px;"
+                  />
+                </button>
+              </a>
+              </div>
+        
+          <div class="section">
+            <div class="section-title">
+              <h2 class="title">Recent Uploads</h2>
+              <div class="section-actions">
+                <a href="/">View all</a>
+              </div>
+            </div>
+            <div class="section-body">
+                <div class="table">
+                    <%for(let movie of record){ %>
+                        <div class="single_movie">
+                           <div class="movie_img_box">
+                              <img src="<%= movie.image %>" alt="" srcset="">
+                           </div>
+                           <h3 class="movie_title"><%= movie.title %></h3>
+                           <div class="btn_container">
+                            <a href="/update/<%=movie.id%>" class="edit_btn">
+                                <!-- <button class="edit_btn">Update</button> -->
+                              Update
+
+                            </a>
+                            <a href="/movies/">
+                              <form action="/movies/del/<%=movie.id%>" method="post">
+                              <button type="submit" class="delete_btn">Delete</button>
+                            </form>
+                            </a>
+                           </div>
+            
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+          </div>
+          <div class="section">
+            <div class="section-title">
+              <h2 class="title">Shared with me</h2>
+              <div class="section-actions">
+                <a href="/">View all</a>
+              </div>
+            </div>
+            <div class="section-body">
+              <div class="card-small">
+                <div class="card-header-small">
+                  <img
+                    height="30"
+                    width="30"
+                    src="https://cdn1.iconfinder.com/data/icons/multimedia-and-interface-flat-style-1/32/Multimedia_Folder_data_file_ui_storage_document_multimedia-512.png"
+                  />
+                  <ul class="project-participants">
+                    <li>
+                      <img
+                        class="project-participant"
+                        src="./assets/face-1.jpg"
+                      />
+                    </li>
+                    <li>
+                      <img
+                        class="project-participant"
+                        src="./assets/face-2.jpg"
+                      />
+                    </li>
+                  </ul>
+                </div>
+                <h2 class="card-title">Landing Page</h2>
+                <p class="card-description">12 Files</p>
+              </div>
+              <div class="card-small">
+                <div class="card-header-small">
+                  <img
+                    height="30"
+                    width="30"
+                    src="https://cdn1.iconfinder.com/data/icons/multimedia-and-interface-flat-style-1/32/Multimedia_Folder_data_file_ui_storage_document_multimedia-512.png"
+                  />
+                  <ul class="project-participants">
+                    <li>
+                      <img
+                        class="project-participant"
+                        src="./assets/face-1.jpg"
+                      />
+                    </li>
+                    <li>
+                      <img
+                        class="project-participant"
+                        src="./assets/face-2.jpg"
+                      />
+                    </li>
+                  </ul>
+                </div>
+                <h2 class="card-title">Illustration Pack</h2>
+                <p class="card-description">24 Files</p>
+              </div>
+              <div class="card-small">
+                <div class="card-header-small">
+                  <img
+                    height="30"
+                    width="30"
+                    src="https://cdn1.iconfinder.com/data/icons/multimedia-and-interface-flat-style-1/32/Multimedia_Folder_data_file_ui_storage_document_multimedia-512.png"
+                  />
+                  <ul class="project-participants">
+                    <li>
+                      <img
+                        class="project-participant"
+                        src="./assets/face-1.jpg"
+                      />
+                    </li>
+                    <li>
+                      <img
+                        class="project-participant"
+                        src="./assets/face-2.jpg"
+                      />
+                    </li>
+                  </ul>
+                </div>
+                <h2 class="card-title">CV Design</h2>
+                <p class="card-description">6 Files</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="profile">
+        <div class="profile-header">
+          <div class="profile-header-actions">
+            <img src="./assets/bell.svg" />
+            <img src="./assets/settings.svg" style="margin-left: 15px;" />
+          </div>
+          <form action="/users/logout" method="post" class="submit_form">
+            <button type="submit" class="submit_btn">logout</button>
+          </form>
+          <div class="profile-header-info">
+            <!-- <span class="profile-header-text"><%=record[0].user.username%></span> -->
+            <span class="profile-header-text">NUHU</span>
+            <img
+              src="./assets/chevron-down.svg"
+              width="16"
+              height="16"
+              style="margin-right: 10px;"
+            />
+            <img src="./assets/face-2.jpg" class="profile-header-info-photo" />
+          </div>
+        </div>
+        <div class="profile-content">
+          <h2 class="profile-title">Storage</h2>
+          <div class="usage-graph">
+            <svg class="arc" viewBox="0 0 190 190">
+              <circle
+                class="arc-documents"
+                cx="95"
+                cy="95"
+                r="91"
+                fill="transparent"
+              />
+              <circle
+                class="arc-videos"
+                cx="95"
+                cy="95"
+                r="91"
+                fill="transparent"
+              />
+              <circle
+                class="arc-images"
+                cx="95"
+                cy="95"
+                r="91"
+                fill="transparent"
+              />
+              <circle
+                class="arc-others"
+                cx="95"
+                cy="95"
+                r="91"
+                fill="transparent"
+              />
+            </svg>
+            <div class="storage-usage">
+              <h1 class="storage-usage-quantity">85</h1>
+              <h2 class="storage-usage-title">Used</h2>
+            </div>
+          </div>
+          <span class="storage-usage-subtitle">420.2 GB of 500 GB used</span>
+          <div class="usage-list">
+            <div class="usage-list-item">
+              <div class="usage-list-wrapper">
+                <div class="document-image">
+                  <img src="./assets/plus.svg" width="18" height="18" />
+                </div>
+                <div class="usage-list-description">
+                  <h3>Document</h3>
+                  <p>72 files</p>
+                </div>
+              </div>
+              <div class="usage-in-list">
+                <span>200 GB</span>
+              </div>
+            </div>
+            <div class="usage-list-item">
+              <div class="usage-list-wrapper">
+                <div class="video-image">
+                  <img src="./assets/plus.svg" width="18" height="18" />
+                </div>
+                <div class="usage-list-description">
+                  <h3>Videos</h3>
+                  <p>124 files</p>
+                </div>
+              </div>
+              <div class="usage-in-list">
+                <span>125 GB</span>
+              </div>
+            </div>
+            <div class="usage-list-item">
+              <div class="usage-list-wrapper">
+                <div class="image-image">
+                  <img src="./assets/plus.svg" width="18" height="18" />
+                </div>
+                <div class="usage-list-description">
+                  <h3>Images</h3>
+                  <p>1200 files</p>
+                </div>
+              </div>
+              <div class="usage-in-list">
+                <span>75 GB</span>
+              </div>
+            </div>
+            <div class="usage-list-item">
+              <div class="usage-list-wrapper">
+                <div class="other-image">
+                  <img src="./assets/plus.svg" width="18" height="18" />
+                </div>
+                <div class="usage-list-description">
+                  <h3>Others</h3>
+                  <p>30 files</p>
+                </div>
+              </div>
+              <div class="usage-in-list">
+                <span>50 GB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </body>
+</html>
