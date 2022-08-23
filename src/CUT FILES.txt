@@ -4,3 +4,6 @@
       "/node_modules/"
     ]
   }
+
+  docker build -t nuhu/dockername .
+docker run -dp 8080:9000 nuhu/dockername
