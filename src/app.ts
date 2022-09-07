@@ -3,14 +3,24 @@ import express,{Request,Response,NextFunction} from 'express'
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import db from './config/database.config';
+import mongoose from 'mongoose';
+// import connectDb from './config/database.config';
 
 
 import userRouter from './routes/userRoute';
 import movieRouter from './routes/movieRoute';
 import homeRouter from './routes/homeRoute';
 
+// connectDb()
+
 const app = express();
+
+const dbURI = 'mongodb+srv://nuhu:test1234@cluster0.nqabtfr.mongodb.net/nuh-prac?retryWrites=true&w=majority'
+const localDbURI = "mongodb://localhost:27017/snazzymovies?readPreference=primary&ssl=false"
+
+mongoose.connect(dbURI)
+.then(()=>console.log('Connected to mongo database'))
+.catch(()=>console.log('Connection failed'));
 
 // view engine setup
 app.set('views', path.join(__dirname, "..",'views'));
@@ -22,11 +32,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join('public')));
 
-db.sync().then(()=>{
-  console.log('Database connected succcesfully')
-}).catch(err=>{
-  console.log(err)
-})
+// db.sync().then(()=>{
+//   console.log('Database connected succcesfully')
+// }).catch(err=>{
+//   console.log(err)
+// })
 
 
 app.use('', homeRouter);

@@ -2,7 +2,7 @@ import express,{Request,Response,NextFunction}
  from 'express'
  import {v4 as uuidv4} from 'uuid'
  import {registerSchema,options,loginSchema,generateToken} from '../utils/utils'
- import {UserInstance } from '../model/userModel'
+ import {UserInstance} from '../model/userModel'
  import bcrypt from 'bcryptjs'
 import { MovieInstance } from '../model/movieModel'
 
@@ -15,7 +15,7 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
               Error:validationResult.error.details[0].message
            })
         }
-        const duplicatEmail = await UserInstance.findOne({where:{email:req.body.email}})
+        const duplicatEmail = await UserInstance.findOne({email:{email:req.body.email}})
         if(duplicatEmail){
          return res.status(409).json({
             msg:"Email is used, please change email"
@@ -38,15 +38,13 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
           email:req.body.email,
           password:passwordHash
         })
-      //  res.status(201).json({
-      //      msg:"You have successfully created a user",
-      //      record
-      //  })
+       res.status(201).json({
+           msg:"You have successfully created a user",
+           record
+       })
 
-      //CHANGE THIS LINE 
-      // res.send("Hurray!!! registered");
+      // res.redirect("/login");
 
-      res.redirect("/login");
 // res.render('register');
       //THIS LINE
     }catch(err){
@@ -136,7 +134,7 @@ export async function getUsers(
      const limit = req.query?.limit as number | undefined;
      const offset = req.query?.offset as number | undefined;
      //  const record = await MovieInstance.findAll({where: {},limit, offset})
-     const record = await UserInstance.findAndCountAll({ limit, offset,
+     const record = await UserInstance.find({ limit, offset,
      include:[{
       model:MovieInstance,
       as:'todo'
@@ -145,8 +143,7 @@ export async function getUsers(
      });
      res.status(200).json({
        msg: "You have successfully fetch all users",
-       count: record.count,
-       record: record.rows,
+       record: record
      });
    } catch (error) {
      res.status(500).json({

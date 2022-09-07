@@ -18,7 +18,7 @@ async function RegisterUser(req, res, next) {
                 Error: validationResult.error.details[0].message
             });
         }
-        const duplicatEmail = await userModel_1.UserInstance.findOne({ where: { email: req.body.email } });
+        const duplicatEmail = await userModel_1.UserInstance.findOne({ email: { email: req.body.email } });
         if (duplicatEmail) {
             return res.status(409).json({
                 msg: "Email is used, please change email"
@@ -38,13 +38,11 @@ async function RegisterUser(req, res, next) {
             email: req.body.email,
             password: passwordHash
         });
-        //  res.status(201).json({
-        //      msg:"You have successfully created a user",
-        //      record
-        //  })
-        //CHANGE THIS LINE 
-        // res.send("Hurray!!! registered");
-        res.redirect("/login");
+        res.status(201).json({
+            msg: "You have successfully created a user",
+            record
+        });
+        // res.redirect("/login");
         // res.render('register');
         //THIS LINE
     }
@@ -124,7 +122,7 @@ async function getUsers(req, res, next) {
         const limit = req.query?.limit;
         const offset = req.query?.offset;
         //  const record = await MovieInstance.findAll({where: {},limit, offset})
-        const record = await userModel_1.UserInstance.findAndCountAll({ limit, offset,
+        const record = await userModel_1.UserInstance.find({ limit, offset,
             include: [{
                     model: movieModel_1.MovieInstance,
                     as: 'todo'
@@ -133,8 +131,7 @@ async function getUsers(req, res, next) {
         });
         res.status(200).json({
             msg: "You have successfully fetch all users",
-            count: record.count,
-            record: record.rows,
+            record: record
         });
     }
     catch (error) {

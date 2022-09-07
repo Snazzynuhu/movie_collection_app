@@ -8,11 +8,18 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
-const database_config_1 = __importDefault(require("./config/database.config"));
+const mongoose_1 = __importDefault(require("mongoose"));
+// import connectDb from './config/database.config';
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const movieRoute_1 = __importDefault(require("./routes/movieRoute"));
 const homeRoute_1 = __importDefault(require("./routes/homeRoute"));
+// connectDb()
 const app = (0, express_1.default)();
+const dbURI = 'mongodb+srv://nuhu:test1234@cluster0.nqabtfr.mongodb.net/nuh-prac?retryWrites=true&w=majority';
+const localDbURI = "mongodb://localhost:27017/snazzymovies?readPreference=primary&ssl=false";
+mongoose_1.default.connect(dbURI)
+    .then(() => console.log('Connected to mongo database'))
+    .catch(() => console.log('Connection failed'));
 // view engine setup
 app.set('views', path_1.default.join(__dirname, "..", 'views'));
 app.set('view engine', 'ejs');
@@ -21,11 +28,11 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(path_1.default.join('public')));
-database_config_1.default.sync().then(() => {
-    console.log('Database connected succcesfully');
-}).catch(err => {
-    console.log(err);
-});
+// db.sync().then(()=>{
+//   console.log('Database connected succcesfully')
+// }).catch(err=>{
+//   console.log(err)
+// })
 app.use('', homeRoute_1.default);
 app.use('/users', userRoute_1.default);
 app.use('/movies', movieRoute_1.default);

@@ -1,10 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.newMoviePage = exports.updatePage = exports.dashboard = exports.deleteMovie = exports.updateMovie = exports.getSingleMovie = exports.getMovies = exports.Movies = void 0;
 const uuid_1 = require("uuid");
-const movieModel_1 = require("../model/movieModel");
+const movieModel_1 = __importDefault(require("../model/movieModel"));
 const userModel_1 = require("../model/userModel");
 const utils_1 = require("../utils/utils");
+// const Movie = require('./models/movieTemplate');
 async function Movies(req, res, next) {
     const id = (0, uuid_1.v4)();
     const verified = req.user;
@@ -16,7 +20,7 @@ async function Movies(req, res, next) {
                 Error: validationResult.error.details[0].message,
             });
         }
-        const record = await movieModel_1.MovieInstance.create(movie);
+        const record = await movieModel_1.default.create(movie);
         res.redirect("/");
         // res.status(201).json({
         //   msg: "You have successfully created a movie",
@@ -35,7 +39,7 @@ async function getMovies(req, res, next) {
     try {
         const limit = req.query?.limit;
         const offset = req.query?.offset;
-        const record = await movieModel_1.MovieInstance.findAll({ limit, offset,
+        const record = await movieModel_1.default.find({ limit, offset,
             include: [{
                     model: userModel_1.UserInstance,
                     attributes: ['id', 'fullname', 'username', 'email'],
@@ -61,7 +65,7 @@ exports.getMovies = getMovies;
 async function getSingleMovie(req, res, next) {
     try {
         const { id } = req.params;
-        const record = await movieModel_1.MovieInstance.findOne({ where: { id } });
+        const record = await movieModel_1.default.findOne({ where: { id } });
         return record;
         // res.status(200).json({
         //   msg: "Successfully gotten movie data",
@@ -86,7 +90,7 @@ async function updateMovie(req, res, next) {
                 Error: validationResult.error.details[0].message,
             });
         }
-        const record = await movieModel_1.MovieInstance.findOne({ where: { id } });
+        const record = await movieModel_1.default.findOne({ where: { id } });
         if (!record) {
             return res.status(404).json({
                 Error: "Cannot find existing movie",
@@ -113,13 +117,13 @@ exports.updateMovie = updateMovie;
 async function deleteMovie(req, res, next) {
     try {
         const { id } = req.params;
-        const record = await movieModel_1.MovieInstance.findOne({ where: { id } });
+        const record = await movieModel_1.default.findOne({ where: { id } });
         if (!record) {
             return res.status(404).json({
                 msg: "Cannot find movie",
             });
         }
-        const deletedRecord = await record.destroy();
+        const deletedRecord = await record.delete();
         return res.send(`<div style="text-align: center">
    <h1 style="color: red;">Movie deleted</h1>
    <a style="background-color:yellowgreen; color:#fff; border-radius:1rem; padding:1rem 3rem; text-decoration:none" href="http://localhost:3000/dashboard">Back to Dashboard</a>
@@ -143,7 +147,7 @@ async function dashboard(req, res, next) {
         const limit = req.query?.limit;
         const offset = req.query?.offset;
         //  const record = await MovieInstance.findAll({where: {},limit, offset})
-        const record = await movieModel_1.MovieInstance.findAll({ limit, offset,
+        const record = await movieModel_1.default.find({ limit, offset,
             include: [{
                     model: userModel_1.UserInstance,
                     attributes: ['id', 'fullname', 'username', 'email'],
@@ -166,7 +170,7 @@ async function updatePage(req, res, next) {
         const limit = req.query?.limit;
         const offset = req.query?.offset;
         //  const record = await MovieInstance.findAll({where: {},limit, offset})
-        const record = await movieModel_1.MovieInstance.findAll({ limit, offset,
+        const record = await movieModel_1.default.find({ limit, offset,
             include: [{
                     model: userModel_1.UserInstance,
                     attributes: ['id', 'fullname', 'username', 'email'],
@@ -189,7 +193,7 @@ async function newMoviePage(req, res, next) {
         const limit = req.query?.limit;
         const offset = req.query?.offset;
         //  const record = await MovieInstance.findAll({where: {},limit, offset})
-        const record = await movieModel_1.MovieInstance.findAll({ limit, offset,
+        const record = await movieModel_1.default.find({ limit, offset,
             include: [{
                     model: userModel_1.UserInstance,
                     attributes: ['id', 'fullname', 'username', 'email'],

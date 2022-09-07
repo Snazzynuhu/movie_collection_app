@@ -1,9 +1,26 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const sequelize_1 = require("sequelize");
-const db = new sequelize_1.Sequelize('app', '', '', {
-    storage: "./database.sqlite",
-    dialect: "sqlite",
-    logging: false
-});
-exports.default = db;
+const mongoose_1 = __importDefault(require("mongoose"));
+const localDbURI = "mongodb://localhost:27017/snazzymovies?readPreference=primary&ssl=false";
+const dbURI = 'mongodb+srv://nuhu:test1234@cluster0.nqabtfr.mongodb.net/nuh-prac?retryWrites=true&w=majority';
+const connectDb = async () => {
+    try {
+        await mongoose_1.default.connect(localDbURI);
+        console.log('Connected to database');
+    }
+    catch (error) {
+        console.log(error);
+    }
+};
+exports.default = connectDb;
+// import {Sequelize} from 'sequelize';
+// const db = new Sequelize('app', '', '',{
+//     storage:"./database.sqlite",
+//     dialect:"sqlite",
+//     logging:false
+// })
+// export default db
+// 'mongodb+srv://nuhu:test1234@cluster0.nqabtfr.mongodb.net/nuh-prac?retryWrites=true&w=majority'

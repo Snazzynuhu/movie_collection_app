@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 export const createMovieSchema = Joi.object().keys({
     title:Joi.string().lowercase().required(),
     description:Joi.string(),
-    image:Joi.string(),
+    imageUrl:Joi.string(),
     price:Joi.number()
 });
 
@@ -25,7 +25,6 @@ export const registerSchema = Joi.object().keys({
 export const loginSchema = Joi.object().keys({
     email:Joi.string().trim().lowercase().required(),
     password:Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-  
 })
 
 //Generate Token

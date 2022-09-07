@@ -9,7 +9,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.createMovieSchema = joi_1.default.object().keys({
     title: joi_1.default.string().lowercase().required(),
     description: joi_1.default.string(),
-    image: joi_1.default.string(),
+    imageUrl: joi_1.default.string(),
     price: joi_1.default.number()
 });
 exports.updateMovieSchema = joi_1.default.object().keys({

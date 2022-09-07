@@ -11,7 +11,7 @@ router.get('/:id',getSingleMovie)
 
 router.patch('/:id',auth,updateMovie)
 router.post('/:id',updateMovie)
-router.delete('/:id',auth,deleteMovie)
+router.delete('/:id',auth,deleteMovie) 
 router.post('/del/:id',deleteMovie)
 
 export default router

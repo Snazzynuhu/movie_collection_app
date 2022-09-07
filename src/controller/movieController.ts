@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { MovieInstance } from "../model/movieModel";
+import  MovieInstance  from "../model/movieModel";
 import { UserInstance } from "../model/userModel";
 import { createMovieSchema, options, updateMovieSchema } from "../utils/utils";
 import {any} from "joi"
 
+// const Movie = require('./models/movieTemplate');
 export async function Movies(
   req: Request | any,
   res: Response,
@@ -20,7 +21,9 @@ export async function Movies(
         Error: validationResult.error.details[0].message,
       });
     }
-    const record = await MovieInstance.create(movie);
+    
+    const record = await MovieInstance.create(movie
+      );
     res.redirect("/")
     // res.status(201).json({
     //   msg: "You have successfully created a movie",
@@ -42,7 +45,7 @@ export async function getMovies(
   try {
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
-    const record = await MovieInstance.findAll({ limit, offset,
+    const record = await MovieInstance.find({ limit, offset,
       include:[{
          model:UserInstance,
          attributes:['id', 'fullname',  'username', 'email'],
@@ -136,7 +139,7 @@ export async function deleteMovie(
         msg: "Cannot find movie",
       });
     }
-    const deletedRecord = await record.destroy();
+    const deletedRecord = await record.delete();
 
     return res.send(`<div style="text-align: center">
    <h1 style="color: red;">Movie deleted</h1>
@@ -164,7 +167,7 @@ export async function dashboard(
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
     //  const record = await MovieInstance.findAll({where: {},limit, offset})
-    const record = await MovieInstance.findAll({ limit, offset,
+    const record = await MovieInstance.find({ limit, offset,
       include:[{
          model:UserInstance,
          attributes:['id', 'fullname',  'username', 'email'],
@@ -191,7 +194,7 @@ export async function updatePage(
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
     //  const record = await MovieInstance.findAll({where: {},limit, offset})
-    const record = await MovieInstance.findAll({ limit, offset,
+    const record = await MovieInstance.find({ limit, offset,
       include:[{
          model:UserInstance,
          attributes:['id', 'fullname',  'username', 'email'],
@@ -217,7 +220,7 @@ export async function newMoviePage(
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
     //  const record = await MovieInstance.findAll({where: {},limit, offset})
-    const record = await MovieInstance.findAll({ limit, offset,
+    const record = await MovieInstance.find({ limit, offset,
       include:[{
          model:UserInstance,
          attributes:['id', 'fullname',  'username', 'email'],
