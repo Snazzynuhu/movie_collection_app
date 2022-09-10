@@ -3,15 +3,19 @@ import jwt from 'jsonwebtoken'
 export const createMovieSchema = Joi.object().keys({
     title:Joi.string().lowercase().required(),
     description:Joi.string(),
-    imageUrl:Joi.string(),
-    price:Joi.number()
+    imgUrl:Joi.string(),
+    genre:Joi.string(),
+    rating:Joi.number(),
+    year:Joi.number()
 });
 
 export const updateMovieSchema = Joi.object().keys({
     title:Joi.string().lowercase(),
     description:Joi.string(),
-    // image:Joi.string(),
-    // price:Joi.number()
+    imgUrl:Joi.string(),
+    genre:Joi.string(),
+    rating:Joi.number(),
+    year:Joi.number()
 });
 
 export const registerSchema = Joi.object().keys({

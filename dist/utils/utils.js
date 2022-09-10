@@ -9,14 +9,18 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.createMovieSchema = joi_1.default.object().keys({
     title: joi_1.default.string().lowercase().required(),
     description: joi_1.default.string(),
-    imageUrl: joi_1.default.string(),
-    price: joi_1.default.number()
+    imgUrl: joi_1.default.string(),
+    genre: joi_1.default.string(),
+    rating: joi_1.default.number(),
+    year: joi_1.default.number()
 });
 exports.updateMovieSchema = joi_1.default.object().keys({
     title: joi_1.default.string().lowercase(),
     description: joi_1.default.string(),
-    // image:Joi.string(),
-    // price:Joi.number()
+    imgUrl: joi_1.default.string(),
+    genre: joi_1.default.string(),
+    rating: joi_1.default.number(),
+    year: joi_1.default.number()
 });
 exports.registerSchema = joi_1.default.object().keys({
     fullname: joi_1.default.string().required(),

@@ -47,10 +47,6 @@ exports.MovieInstance = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const movieSchema = new Schema({
-    id: {
-        type: String,
-        required: true
-    },
     title: {
         type: String,
         required: true
@@ -59,20 +55,23 @@ const movieSchema = new Schema({
         type: String,
         required: true
     },
-    imageUrl: {
+    imgUrl: {
         type: String,
         required: true
     },
-    price: {
+    genre: {
+        type: String,
+        required: true
+    },
+    rating: {
         type: Number,
         required: true
     },
-    userId: {
-        type: String,
+    year: {
+        type: Number,
         required: true
     }
 }, {
     timestamps: true
 });
 exports.MovieInstance = mongoose_1.default.model('Movie', movieSchema);
-// module.exports = MovieInstance;

@@ -3,9 +3,9 @@ import {auth} from '../middleware/auth'
 
 const router = express.Router();
 
-import {Movies, getMovies,getSingleMovie,updateMovie,deleteMovie} from '../controller/movieController'
+import {createMovie, getMovies,getSingleMovie,updateMovie,deleteMovie} from '../controller/movieController'
 
-router.post('/create',auth, Movies);
+router.post('/create', createMovie);
 router.get('/',getMovies)
 router.get('/:id',getSingleMovie)
 

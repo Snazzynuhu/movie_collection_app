@@ -73,7 +73,7 @@
                     <%for(let movie of record){ %>
                         <div class="single_movie">
                            <div class="movie_img_box">
-                              <img src="<%= movie.image %>" alt="" srcset="">
+                              <img src="<%= movie.imgUrl %>" alt="" srcset="">
                            </div>
                            <h3 class="movie_title"><%= movie.title %></h3>
                            <div class="btn_container">
@@ -191,7 +191,7 @@
             <button type="submit" class="submit_btn">logout</button>
           </form>
           <div class="profile-header-info">
-            <!-- <span class="profile-header-text"><%=record[0].user.username%></span> -->
+            
             <span class="profile-header-text">NUHU</span>
             <img
               src="./assets/chevron-down.svg"

@@ -1,40 +1,33 @@
 import { Request, Response, NextFunction } from "express";
 import { v4 as uuidv4 } from "uuid";
-import  MovieInstance  from "../model/movieModel";
+import  {MovieInstance}  from "../model/movieModel";
 import { UserInstance } from "../model/userModel";
 import { createMovieSchema, options, updateMovieSchema } from "../utils/utils";
 import {any} from "joi"
 
-// const Movie = require('./models/movieTemplate');
-export async function Movies(
-  req: Request | any,
-  res: Response,
-  next: NextFunction
-) {
-  const id = uuidv4();
-  const verified = req.user;
-  let movie = { id ,...req.body, userId: verified.id };
-  try {
-    const validationResult = createMovieSchema.validate(req.body, options);
-    if (validationResult.error) {
-      return res.status(400).json({
-        Error: validationResult.error.details[0].message,
+
+export async function createMovie(
+  req:Request, 
+  res:Response, 
+  next:NextFunction) {
+    try{
+      const {title,description, genre,imgUrl, rating,year}= req.body;
+      const validationResult = createMovieSchema.validate(req.body, options);
+      if (validationResult.error) {
+        return res.status(400).json({
+          Error: validationResult.error.details[0].message,
+        });
+      }
+      const newMovie = new MovieInstance(req.body);
+    // const movie = newMovie.save().then((record) => res.status(201).json(record));
+    const movie = newMovie.save().then((record) => res.redirect("/"));
+    }
+    catch (err) {
+      res.status(500).json({
+        msg: "failed to create",
+        route: "/create",
       });
     }
-    
-    const record = await MovieInstance.create(movie
-      );
-    res.redirect("/")
-    // res.status(201).json({
-    //   msg: "You have successfully created a movie",
-    //   record,
-    // });
-  } catch (err) {
-    res.status(500).json({
-      msg: "failed to create",
-      route: "/create",
-    });
-  }
 }
 
 export async function getMovies(
@@ -45,23 +38,15 @@ export async function getMovies(
   try {
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
-    const record = await MovieInstance.find({ limit, offset,
-      include:[{
-         model:UserInstance,
-         attributes:['id', 'fullname',  'username', 'email'],
-         as:'user'
-        }
-        ]
-   });
+    const record = await MovieInstance.find();
    res.render("index",{record})
     // res.status(200).json({
     //   msg: "You have successfully fetch all movies",
-    //   // count: record.count,
     //   record: record
     // });
   } catch (error) {
     res.status(500).json({
-      msg: "failed to read",
+      msg: "failed to fetch all movies",
       route: "/read",
     });
   }
@@ -74,15 +59,15 @@ export async function getSingleMovie(
 ) {
   try {
     const { id } = req.params;
-    const record = await MovieInstance.findOne({ where: { id } });
-    return record;
+    const record = await MovieInstance.findById(id);
+    return record
     // res.status(200).json({
     //   msg: "Successfully gotten movie data",
     //   record,
     // });
   } catch (error) {
     res.status(500).json({
-      msg: "failed to read single todo",
+      msg: "failed to fetch single movie",
       route: "/movies/:id",
     });
   }
@@ -95,28 +80,27 @@ export async function updateMovie(
 ) {
   try {
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description,imgUrl, genre,rating,year } = req.body;
     const validationResult = updateMovieSchema.validate(req.body, options);
     if (validationResult.error) {
       return res.status(400).json({
         Error: validationResult.error.details[0].message,
       });
     }
+    const record = await MovieInstance.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-    const record = await MovieInstance.findOne({ where: { id } });
     if (!record) {
       return res.status(404).json({
         Error: "Cannot find existing movie",
       });
     }
-    const updatedrecord = await record.update({
-      title: title,
-      description: description,
-    })
     res.redirect("/dashboard");
     // res.status(200).json({
     //   msg: "You have successfully updated a movie",
-    //   updatedrecord,
+    //   record
     // });
   } catch (error) {
     res.status(500).json({
@@ -133,21 +117,19 @@ export async function deleteMovie(
 ) {
   try {
     const { id } = req.params;
-    const record = await MovieInstance.findOne({ where: { id } });
+    const record = await MovieInstance.findByIdAndDelete(id);
     if (!record) {
       return res.status(404).json({
-        msg: "Cannot find movie",
+        msg: "Movie not deleted",
       });
     }
-    const deletedRecord = await record.delete();
-
     return res.send(`<div style="text-align: center">
    <h1 style="color: red;">Movie deleted</h1>
    <a style="background-color:yellowgreen; color:#fff; border-radius:1rem; padding:1rem 3rem; text-decoration:none" href="http://localhost:3000/dashboard">Back to Dashboard</a>
    </div>`)
     // res.status(200).json({
     //   msg: "Movie deleted successfully",
-    //   deletedRecord,
+    //   record
     // });
   } catch (error) {
     res.status(500).json({
@@ -157,7 +139,6 @@ export async function deleteMovie(
   }
 }
 
-//this line today
 export async function dashboard(
   req: Request,
   res: Response,
@@ -166,15 +147,7 @@ export async function dashboard(
   try {
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
-    //  const record = await MovieInstance.findAll({where: {},limit, offset})
-    const record = await MovieInstance.find({ limit, offset,
-      include:[{
-         model:UserInstance,
-         attributes:['id', 'fullname',  'username', 'email'],
-         as:'user'
-        }
-        ]
-   });
+    const record = await MovieInstance.find();
    res.render("dashboard",{record})
 
   } catch (error) {
@@ -193,16 +166,18 @@ export async function updatePage(
   try {
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
+
     //  const record = await MovieInstance.findAll({where: {},limit, offset})
-    const record = await MovieInstance.find({ limit, offset,
-      include:[{
-         model:UserInstance,
-         attributes:['id', 'fullname',  'username', 'email'],
-         as:'user'
-        }
-        ]
-   });
-   //res.render("updateMovieForm",{record})
+  //   const record = await MovieInstance.find({ limit, offset,
+  //     include:[{
+  //        model:UserInstance,
+  //        attributes:['id', 'fullname',  'username', 'email'],
+  //        as:'user'
+  //       }
+  //       ]
+  //  });
+    const record = await MovieInstance.find();
+  //  res.render("updateMovieForm",{record})
 
   } catch (error) {
     res.status(500).json({
@@ -220,14 +195,15 @@ export async function newMoviePage(
     const limit = req.query?.limit as number | undefined;
     const offset = req.query?.offset as number | undefined;
     //  const record = await MovieInstance.findAll({where: {},limit, offset})
-    const record = await MovieInstance.find({ limit, offset,
-      include:[{
-         model:UserInstance,
-         attributes:['id', 'fullname',  'username', 'email'],
-         as:'user'
-        }
-        ]
-   });
+  //   const record = await MovieInstance.find({ limit, offset,
+  //     include:[{
+  //        model:UserInstance,
+  //        attributes:['id', 'fullname',  'username', 'email'],
+  //        as:'user'
+  //       }
+  //       ]
+  //  });
+    const record = await MovieInstance.find();
    res.render("addNewMovie")
 
   } catch (error) {

@@ -86,7 +86,6 @@ const userSchema = new Schema({
     username: String,
     email: String,
     password: String,
-    address: String, 
     movies:[{
         type:Schema.Types.ObjectId,
         ref:"movies"

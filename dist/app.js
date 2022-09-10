@@ -17,9 +17,9 @@ const homeRoute_1 = __importDefault(require("./routes/homeRoute"));
 const app = (0, express_1.default)();
 const dbURI = 'mongodb+srv://nuhu:test1234@cluster0.nqabtfr.mongodb.net/nuh-prac?retryWrites=true&w=majority';
 const localDbURI = "mongodb://localhost:27017/snazzymovies?readPreference=primary&ssl=false";
-mongoose_1.default.connect(dbURI)
+mongoose_1.default.connect(localDbURI)
     .then(() => console.log('Connected to mongo database'))
-    .catch(() => console.log('Connection failed'));
+    .catch((err) => console.log('Connection failed' + err));
 // view engine setup
 app.set('views', path_1.default.join(__dirname, "..", 'views'));
 app.set('view engine', 'ejs');
@@ -28,11 +28,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(path_1.default.join('public')));
-// db.sync().then(()=>{
-//   console.log('Database connected succcesfully')
-// }).catch(err=>{
-//   console.log(err)
-// })
+// MIDDLEWARES
 app.use('', homeRoute_1.default);
 app.use('/users', userRoute_1.default);
 app.use('/movies', movieRoute_1.default);

@@ -8,17 +8,7 @@ const connectDb = async () => {
         console.log('Connected to database')
     } catch (error) {
         console.log(error);
-        
     }
 } 
 export default connectDb;
 
-
-// import {Sequelize} from 'sequelize';
-// const db = new Sequelize('app', '', '',{
-//     storage:"./database.sqlite",
-//     dialect:"sqlite",
-//     logging:false
-// })
-// export default db
-// 'mongodb+srv://nuhu:test1234@cluster0.nqabtfr.mongodb.net/nuh-prac?retryWrites=true&w=majority'
